@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>proj_2</name>
+  <version>1.0.0</version>
+  <description>The iiwa_ros package</description>
+  <author email="jpitma1@umd.edu">Jerry Pittman, Jr.</author>
+  <maintainer email="jpitma1@umd.edu">Jerry Pittman, Jr.</maintainer>
+
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>roscpp</depend>
+  <depend>rospy</depend>
+  <depend>roslaunch</depend>
+  <depend>rviz</depend>
+  <depend>gazebo</depend>
+  <depend>gazebo_ros</depend>
+  <depend>iiwa_ros</depend>
+  <depend>iiwa_msgs</depend>
+  <depend>robot_state_publisher</depend>
+
+  <export>
+    <architecture_independent />
+  </export>
+  
+</package>
