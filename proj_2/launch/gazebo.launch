@@ -11,25 +11,17 @@
     <!-- |    controllers for the single joints, using the "trajectory" argument.            | -->
     <!-- ===================================================================================== -->
     
+    <arg name="hardware_interface" default="PositionJointInterface" />
+    <arg name="robot_name" default="iiwa" />
+    <arg name="model" default="iiwa7"/>
+    <arg name="trajectory" default="true"/>
+    
     <!-- Loads the Gazebo world. -->
     <include file="$(find proj_2)/launch/iiwa_world.launch">
-        <arg name="hardware_interface" default="PositionJointInterface" />
-        <arg name="robot_name" default="proj_2" />
-        <arg name="model" default="iiwa7"/>
-        <arg name="trajectory" default="true"/>
+        <arg name="hardware_interface" value="$(arg hardware_interface)" />
+        <arg name="robot_name" value="$(arg robot_name)" />
+        <arg name="model" value="$(arg model)" />
     </include>
-
-    <param name="robot_description" command="$(find xacro)/xacro $(find proj_2)/urdf/proj2_integration.xacro" />
-    <param name = "my_robot" value="proj_2"/>
-    <arg name ="init_pose" value="-x 0 -y 0 -z 0 -R 0 -P 0 -Y 0"/>
-
-    <!-- A node to spawn the robot into gazebo's world file. Notice that the args has the param robot_description that you previously defined. This is how your robot's spec gets included.-->
-    <node
-        name="spawn_model"
-        pkg="gazebo_ros"
-        type="spawn_model"
-        args="$(arg init_pose) -param robot_description -urdf -model my_robot"
-        output="screen"/>
 
     <!-- Spawn controllers - it uses a JointTrajectoryController -->
     <group  ns="$(arg robot_name)" if="$(arg trajectory)">
