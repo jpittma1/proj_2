@@ -1,143 +1,286 @@
 #!/usr/bin/env python
 import rospy
-
 from std_msgs.msg import Float64
-
 import sys, select, termios, tty
 
+from numpy.linalg import inv
+from sympy import *
+from sympy import sin, cos, Matrix, Subs, N
+from sympy import diff #to take partial derivative
+import sympy as sp
+import math
+import numpy as np
+from sympy.physics.mechanics import dynamicsymbols, Point, ReferenceFrame
+from sympy.physics.vector import init_vprinting
+init_vprinting(use_latex='mathjax', pretty_print=False)
+from sympy.matrices.common import a2idx
+init_printing(use_unicode=True)
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+
+d2r=np.deg2rad
+
+#---------------------PART 1-----------------#
+
+#---Forward Kinematics (HW#3)------#
+theta1=symbols('theta1')
+theta2=symbols('theta2')
+theta3=symbols('theta3')
+theta4=symbols('theta4')
+theta5=symbols('theta5')
+theta6=symbols('theta6') 
+theta7=symbols('theta7')
+
+#--Measurements from Figure 2 (in meters)--
+d1=0.36 #360mm
+d3=0.42
+d5=(201+198.5)/1000 
+d7=0.1055 
+tool=0.1 #10 cm calibration tool
+
+#--TO BE SUPERCEDED by calculating based on EE position
+#--Provided Initial Angles (in radians)--
+# t1=sp.pi/2
+t1=(np.pi)/2
+t2=0
+t3=0
+t4=-(np.pi)/2
+# t5=0
+t6=0
+t7=0
+
+#---Homogenous Transformation Matrices with Joint 5 locked----
+A1=Matrix([[cos(theta1),0,-sin(theta1),0],[sin(theta1),0,cos(theta1),0],[0,-1,0,d1],[0,0,0,1]])
+A2=Matrix([[cos(theta2),0,sin(theta2),0],[sin(theta2),0,-cos(theta2),0],[0,1,0,0],[0,0,0,1]])
+A3=Matrix([[cos(theta3),0,-sin(theta3),0],[sin(theta3),0,cos(theta3),0],[0,-1,0,d3],[0,0,0,1]])
+A4=Matrix([[cos(theta4),0,sin(theta4),0],[sin(theta4),0,-cos(theta4),0],[0,1,0,0],[0,0,0,1]])
+# A5=Matrix([[cos(theta5),0,-sin(theta5),0],[sin(theta5),0,cos(theta5),0],[0,-1,0,d5],[0,0,0,1]])
+A6=Matrix([[cos(theta6),0,sin(theta6),0],[sin(theta6),0,-cos(theta6),0],[0,1,0,d5],[0,0,0,1]])
+A7=Matrix([[cos(theta6),-sin(theta7),0,0],[sin(theta7), cos(theta7),0,0],[0,0,1,(d7+tool)],[0,0,0,1]])
+
+#---Final Transformation np.array (Base to Frame 7)---
+H=A1*A2*A3*A4*A6*A7
+
+# print(H.shape) #4x4
+# print("\nForward Kinematics Transformation is: \n",np.array(H.evalf(2)))
+
+#X is first 3 elements of 4th column (d)
+X = Matrix( H[[0,1,2],:][:,3] ) #d_x, d_y, and d_z
+# d_x=H[0,3]
+# d_y=H[1,3]
+# d_z=H[2,3]
+print(X)
+
+#solve for X with known EE position
+
+q_0 = Matrix([[theta1],[theta2],[theta4],[theta5],[theta6],[theta7]])
+# print("\n Symbolic q_0 is ",q_0)
+
+#--------PART 2: Inverse Velocity Kinematics---------------------------#
+
+#---Symbolic Jacobian-----
+jacob=X.jacobian(q_0)
+
+# print("\n\nParametric Jacobian is ", np.array(jacob.evalf(2)))
+# print(jacob.shape) #6x6 matrix
+
+#------------PART 3: Plot the circle---------------------------#
+
+#--Make Jacobian Numeric vice Parametric--
+J = jacob.subs([(theta1,t1),(theta2,t2), (theta4,t4), (theta3,t3),(theta6,t6),(theta7,t7)])
+# print ("\nNumeric Jacobian is: ", np.array(J.evalf(4)))
+# print("\nShape after subs: ", jacob.shape) #6x6 matrix
+
+#--Initial Joint Angles inputed into q_0---
+q_0 = q_0.subs([(theta1,t1),(theta2,t2), (theta4,t4), (theta3,t3),(theta6,t6),(theta7,t7)])
+q_previous = q_0;
+# print("\nInitial Joint Angles (q_0): ", np.array(q_0.evalf(4) ) )
+
+goal_1=[-0.2, 0.7, 0.0]
+goal_2=[0.2, 0.7, 0.0]
+goal_3=[0.2, 0.4, 0.0]
+goal_4=[-0.2, 0.4, 0.0]
+d_x=goal_1[0]
+d_y=goal_1[1]
+d_z=goal_1[2]
+
+#Plot EE Position
+plt.figure(800)
+plt.axis([-0.5, 0.5, 0.3, 0.8])
+plt.title("ENPM 662 Project#2\nJerry Pittman (117707120)\nMaitreya Kulkarni (UMDID)")
+plt.xlabel('X-axis of Workspace (m)')
+plt.ylabel('Y-axis of Workspace(m)')
+plt.text(-0.2,0.7,"Goal 1")
+plt.plot(-0.2,0.7,'bo')
+plt.text(0.2,0.7,"Goal 2")
+plt.plot(0.2,0.7,'bo')
+plt.text(0.2,0.4,"Goal 3")
+plt.plot(0.2,0.4,'bo')
+plt.text(-0.2,0.4,"Goal 4")
+plt.plot(-0.2,0.4,'bo')
+plt.grid()
+
+#Solve for joint angles based on EE position; Inv Kin.
+t1=
+t2=
+t3=
+t4=
+t6=
+t7=
+
+plt.figure(1)
+plt.title("Joint 1 Angles")
+plt.ylabel('Joint Angle (rad)')
+plt.xlabel('time (sec)')
+plt.grid()
+
+plt.figure(2)
+plt.title("Joint 2 Angles")
+plt.ylabel('Joint Angle (rad)')
+plt.xlabel('time (sec)')
+plt.grid()
+
+plt.figure(3)
+plt.title("Joint 3 Angles")
+plt.ylabel('Joint Angle (rad)')
+plt.xlabel('time (sec)')
+plt.grid()
+
+plt.figure(4)
+plt.title("Joint 4 Angles")
+plt.ylabel('Joint Angle (rad)')
+plt.xlabel('time (sec)')
+plt.grid()
+
+plt.figure(6)
+plt.title("Joint 6 Angles")
+plt.ylabel('Joint Angle (rad)')
+plt.xlabel('time (sec)')
+plt.grid()
+
+plt.figure(7)
+plt.title("Joint 7 Angles")
+plt.ylabel('Joint Angle (rad)')
+plt.xlabel('time (sec)')
+plt.grid()
+
 msg = """
-Control Your Toy!
+Moving Kuka for Calibration of Tool!
 ---------------------------
-Moving around:
-   u    i    o
-   j    k    l
-   m    ,    .
-q/z : increase/decrease max speeds by 10%
-w/x : increase/decrease only linear speed by 10%
-e/c : increase/decrease only angular speed by 10%
-space key, k : force stop
-anything else : stop smoothly
+(Positions are in mm)
+Position pt is (x, y, z)
+Position 1 is (-200, 600, 0)
+Position 2 is (200, 600, 0)
+Position 3 is (200, 400, 0)
+Position 4 is (-200, 400, 0)
+Allowed error is 10 mm
+
 CTRL-C to quit
 """
 
-moveBindings = {
-        'i':(1,0),
-        'o':(1,-1),
-        'j':(0,1),
-        'l':(0,-1),
-        'u':(1,1),
-        ',':(-1,0),
-        '.':(-1,1),
-        'm':(-1,-1),
-           }
-
-speedBindings={
-        'q':(1.1,1.1),
-        'z':(.9,.9),
-        'w':(1.1,1),
-        'x':(.9,1),
-        'e':(1,1.1),
-        'c':(1,.9),
-          }
-
-def getKey():
-    tty.setraw(sys.stdin.fileno())
-    rlist, _, _ = select.select([sys.stdin], [], [], 0.1)
-    if rlist:
-        key = sys.stdin.read(1)
-    else:
-        key = ''
-
-    termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
-    return key
-
-speed = 8
-turn = 0.5
-
-def vels(speed,turn):
-    return "currently:\tspeed %s\tturn %s " % (speed,turn)
-
 if __name__=="__main__":
-    settings = termios.tcgetattr(sys.stdin)
+
+
+    rospy.init_node('kuka_calibrate')
     
-    rospy.init_node('turtlebot_teleop')
+    # PositionJointInterface_J1_controller
+    # type: effort_controllers/JointPositionController
+    # joint: iiwa_joint_1
 
-    pub_right = rospy.Publisher('/proj_1/right_steering_joint_position_controller/command', Float64, queue_size=10) # Add your topic here between ''. Eg '/my_robot/steering_controller/command'
-    pub_left = rospy.Publisher('/proj_1/left_steering_joint_position_controller/command', Float64, queue_size=10)
+    #Create Publishers to Joint Controllers
+    pub_J1 = rospy.Publisher('/proj_2/PositionJointInterface_J1_controller/command', Float64, queue_size=10) 
+    pub_J2 = rospy.Publisher('/proj_2/PositionJointInterface_J2_controller/command', Float64, queue_size=10) 
+    pub_J3 = rospy.Publisher('/proj_2/PositionJointInterface_J3_controller/command', Float64, queue_size=10) 
+    pub_J4 = rospy.Publisher('/proj_2/PositionJointInterface_J4_controller/command', Float64, queue_size=10) 
+    pub_J6 = rospy.Publisher('/proj_2/PositionJointInterface_J6_controller/command', Float64, queue_size=10) 
+    pub_J7 = rospy.Publisher('/proj_2/PositionJointInterface_J7_controller/command', Float64, queue_size=10) 
+    
 
-    pub_move = rospy.Publisher('/proj_1/rear_wheels_position_controller/command', Float64, queue_size=10) # Add your topic for move here '' Eg '/my_robot/longitudinal_controller/command'
-
-    x = 0
-    th = 0
-    status = 0
-    count = 0
-    acc = 0.1
-    target_speed = 0
-    target_turn = 0
-    control_speed = 0
-    control_turn = 0
     try:
         print (msg)
-        print (vels(speed,turn))
-        while(1):
-            key = getKey()
-            if key in moveBindings.keys():
-                x = moveBindings[key][0]
-                th = moveBindings[key][1]
-                count = 0
-            elif key in speedBindings.keys():
-                speed = speed * speedBindings[key][0]
-                turn = turn * speedBindings[key][1]
-                count = 0
+        # print ("Joint angle 1 is ")
+        # print (t1)
 
-                print (vels(speed,turn))
-                if (status == 14):
-                    print (msg)
-                status = (status + 1) % 15
-            elif key == ' ' or key == 'k' :
-                x = 0
-                th = 0
-                control_speed = 0
-                control_turn = 0
-            else:
-                count = count + 1
-                if count > 4:
-                    x = 0
-                    th = 0
-                if (key == '\x03'):
-                    break
+        time=0
+        delta_t=0.5
+        error=0.01 #10 cm
+        cal=0.01 #calibrate every 10cm
+        i=2 #iterate calibration rows
+        #while position of EE is not goal_3 or 4   
+        while (d_x!=goal_4[0] and d_y!=goal_4[1]) or (d_x!=goal_3[0] and d_y!=goal_3[1]):
+        #calibrating between goal 1 and 2
+            if d_y==goal_1[1]: #700
+                if d_x==goal_2[0]:
+                    d_y=goal_2[1]-cal #move down a row
+                
+                d_x=d_x+cal
+            elif d_x!=goal_1[0] and d_y!=goal_2[1]-error: #calibrating between goal 2 and sub1 goal 1
+                if d_x==goal_1[0] and d_y==goal_1[1]-error:
+                    d_y=goal_1[1]-cal #move down a row
+                
+                d_x=d_x-cal
+            elif d_y==goal_1[1]-(i*cal): #calibrating between goal 1-(i*cal) and goal 2-(i*cal)
+                if d_x==goal_2[0]:
+                    d_y=d_y-cal #move down a row (-y)
+                    i+=1
+                
+                d_x=d_x+cal #move toward right (+x)
+            elif d_x!=goal_1[0] and d_y!=goal_2[1]-(i*cal):#calibrating between goal 2-(i*cal) and  goal 1-i*cal
+                if d_x==goal_1[0] and d_y==goal_1[1]-(i*cal):
+                    d_y=d_y-cal #move down a row (-y)
+                    i+=1
+                
+                d_x=d_x-cal #move towards left (-x)
+            
+            #Graph EE Position
+            plt.figure(800)
+            plt.scatter(d_x, d_y)
 
-            target_speed = speed * x
-            target_turn = turn * th
+            
+            #Re-solve for joint angles based on EE position
+            t1=
+            t2=
+            t3=
+            t4=
+            t6=
+            t7=
 
-            if target_speed > control_speed:
-                control_speed = min( target_speed, control_speed + 1 )
-            elif target_speed < control_speed:
-                control_speed = max( target_speed, control_speed - 1 )
-            else:
-                control_speed = target_speed
+            #plot Joint Angles
+            plt.figure(1) #Joint 1
+            plt.scatter(time, t1)
+            plt.figure(2) #Joint 2
+            plt.scatter(time, t2)
+            plt.figure(3)  #Joint 3
+            plt.scatter(time, t3)
+            plt.figure(4)  #Joint 4
+            plt.scatter(time, t4)
+            plt.figure(6)  #Joint 6
+            plt.scatter(time, t6)
+            plt.figure(7)  #Joint 7
+            plt.scatter(time, t7)
 
-            if target_turn > control_turn:
-                control_turn = min( target_turn, control_turn + 0.5 )
-            elif target_turn < control_turn:
-                control_turn = max( target_turn, control_turn - 0.5 )
-            else:
-                control_turn = target_turn
+            #publish joint angle
+            pub_J1.publish(t1) # publish the joint angle command
+            pub_J2.publish(t2) # publish the joint angle command
+            pub_J3.publish(t3) # publish the joint angle command
+            pub_J4.publish(t4) # publish the joint angle command
+            pub_J6.publish(t6) # publish the joint angle command
+            pub_J7.publish(t7) # publish the joint angle command
 
-            pub_right.publish(control_turn) # publish the turn command.
-            pub_left.publish(control_turn) # publish the turn command.
-            pub_move.publish(control_speed) # publish the control speed. 
+            time+=delta_t
+        
+        if (d_x==goal_4[0] and d_y==goal_4[1]) or (d_x==goal_3[0] and d_y==goal_3[1]):
+            print("Calibration Complete!")
 
     except:
         print (msg)
 
     finally:
-        pub_right.publish(control_turn)
-        pub_left.publish(control_turn)
-        pub_move.publish(control_speed)
-        # twist = Twist()
-        # twist.linear.x = 0; twist.linear.y = 0; twist.linear.z = 0
-        # twist.angular.x = 0; twist.angular.y = 0; twist.angular.z = 0
-        # pub.publish(twist)
+        #publish joint angle
+        pub_J1.publish(t1) # publish the joint angle command
+        pub_J2.publish(t2) # publish the joint angle command
+        pub_J3.publish(t3) # publish the joint angle command
+        pub_J4.publish(t4) # publish the joint angle command     
+        pub_J6.publish(t6) # publish the joint angle comand
+        pub_J7.publish(t7) # publish the joint angle command
 
-    termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
