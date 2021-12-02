@@ -205,7 +205,7 @@ pub_J6 = rospy.Publisher('/proj_2/PositionJointInterface_J6_controller/command',
 pub_J7 = rospy.Publisher('/proj_2/PositionJointInterface_J7_controller/command', Float64, queue_size=10) 
     
 time=0.0
-delta_t=0.5
+# delta_t=0.5
 error=0.01 #10 cm
 cal=0.01 #calibrate every 10cm
 i=2 #iterate calibration rows
@@ -249,19 +249,20 @@ def kuka_calibrate():
         t6=
         t7=
 
+        seconds = rospy.get_time()
         #plot Joint Angles
         plt.figure(1) #Joint 1
-        plt.scatter(time, t1)
+        plt.scatter(seconds, t1)
         plt.figure(2) #Joint 2
-        plt.scatter(time, t2)
+        plt.scatter(seconds, t2)
         plt.figure(3)  #Joint 3
-        plt.scatter(time, t3)
+        plt.scatter(seconds, t3)
         plt.figure(4)  #Joint 4
-        plt.scatter(time, t4)
+        plt.scatter(seconds, t4)
         plt.figure(6)  #Joint 6
-        plt.scatter(time, t6)
+        plt.scatter(seconds, t6)
         plt.figure(7)  #Joint 7
-        plt.scatter(time, t7)
+        plt.scatter(seconds, t7)
 
         #publish joint angle
         pub_J1.publish(t1) # publish the joint angle command
@@ -270,8 +271,6 @@ def kuka_calibrate():
         pub_J4.publish(t4) # publish the joint angle command
         pub_J6.publish(t6) # publish the joint angle command
         pub_J7.publish(t7) # publish the joint angle command
-
-        time=time+delta_t
         
         if (d_x==goal_4[0] and d_y==goal_4[1]) or (d_x==goal_3[0] and d_y==goal_3[1]):
             print("Calibration Complete!")
@@ -292,3 +291,4 @@ if __name__=="__main__":
         pub_J4.publish(t4) # publish the joint angle command
         pub_J6.publish(t6) # publish the joint angle comand
         pub_J7.publish(t7) # publish the joint angle command
+
