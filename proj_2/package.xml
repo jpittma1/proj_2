@@ -2,23 +2,33 @@
 <package format="2">
   <name>proj_2</name>
   <version>1.0.0</version>
-  <description>The iiwa_ros package</description>
+  <description>Proj 2 package for controlling Kuka in Gazebo</description>
   <author email="jpitma1@umd.edu">Jerry Pittman, Jr.</author>
   <maintainer email="jpitma1@umd.edu">Jerry Pittman, Jr.</maintainer>
 
   <license>BSD</license>
 
   <buildtool_depend>catkin</buildtool_depend>
-
+  <build_depend>rospy</build_depend>
+  <build_export_depend>rospy</build_export_depend>
   <depend>roscpp</depend>
   <depend>rospy</depend>
   <depend>roslaunch</depend>
   <depend>rviz</depend>
   <depend>gazebo</depend>
   <depend>gazebo_ros</depend>
-  <depend>iiwa_ros</depend>
-  <depend>iiwa_msgs</depend>
-  <depend>robot_state_publisher</depend>
+  <depend>robot_state_publisher</depend>  
+  <depend>joint_state_publisher_gui</depend>
+  <build_depend>message_generation</build_depend>
+  <build_depend>gazebo_msgs</build_depend>
+  <build_depend>tf</build_depend>
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>message_runtime</exec_depend>
+  <exec_depend>gazebo_msgs</exec_depend>
+  <exec_depend>tf</exec_depend>
+  <exec_depend>gazebo_ros</exec_depend>
+  <exec_depend>gazebo</exec_depend>
+  <exec_depend>gazebo_plugins</exec_depend>
 
   <export>
     <architecture_independent />
