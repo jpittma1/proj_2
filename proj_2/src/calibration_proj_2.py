@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# ENPM Project 2
+# ENPM Project 2 Fall AY2021
 # Script for calibration of Kuka Robot
 
 import rospy
@@ -67,16 +67,18 @@ H_tool=A1*A2*A3*A4*A5*A6*A7*Atool
 # print(H.shape) #4x4
 # print("\nForward Kinematics Transformation is: \n",np.array(H.evalf(2)))
 
+#--End Effector (calibration tool tip) position---
 #X is first 3 elements of 4th column (d)
-X = Matrix( H[[0,1,2],:][:,3] ) #d_x, d_y, and d_z
+# X = Matrix( H[[0,1,2],:][:,3] ) #no tool attached
+X = Matrix( H_tool[[0,1,2],:][:,3] ) #d_x, d_y, and d_z
 # d_x=H[0,3]
 # d_y=H[1,3]
 # d_z=H[2,3]
 # print(X)
 
-#Solve for joint angles based on EE position; Inv Kin.
-# atan2
-# acos
+#----Solve for joint angles based on EE position---
+# -------Using Inv Kinematics-----
+#-------------starting EE at goal 1
 goal_1=[-0.2, 0.7, 0.0]
 goal_2=[0.2, 0.7, 0.0]
 goal_3=[0.2, 0.4, 0.0]
