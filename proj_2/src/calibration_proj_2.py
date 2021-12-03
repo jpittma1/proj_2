@@ -141,6 +141,12 @@ plt.ylabel('Joint Angle (rad)')
 plt.xlabel('time (sec)')
 plt.grid()
 
+plt.figure(5)  #Joint 5
+plt.title("Joint 5 Angles")
+plt.ylabel('Joint Angle (rad)')
+plt.xlabel('time (sec)')
+plt.grid()
+
 plt.figure(6)
 plt.title("Joint 6 Angles")
 plt.ylabel('Joint Angle (rad)')
@@ -234,6 +240,8 @@ def kuka_calibrate():
         plt.scatter(seconds, t3)
         plt.figure(4)  #Joint 4
         plt.scatter(seconds, t4)
+        plt.figure(5)  #Joint 5
+        plt.scatter(seconds, t5)
         plt.figure(6)  #Joint 6
         plt.scatter(seconds, t6)
         plt.figure(7)  #Joint 7
