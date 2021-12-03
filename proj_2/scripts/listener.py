@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+#ENPM662 Fall AY2021
 ##Project 2 Script Subscriber
 
 import rospy
@@ -11,11 +11,12 @@ def callback(data):
 def listener():
 
     rospy.init_node('listener', anonymous=True)
-    # pub_J1 = rospy.Publisher('/proj_2/PositionJointInterface_J1_controller/command', Float64, queue_size=10) 
+    
     rospy.Subscriber("/proj_2/PositionJointInterface_J1_controller/command", Float64, callback)
     rospy.Subscriber("/proj_2/PositionJointInterface_J2_controller/command", Float64, callback)
     rospy.Subscriber("/proj_2/PositionJointInterface_J3_controller/command", Float64, callback)
     rospy.Subscriber("/proj_2/PositionJointInterface_J4_controller/command", Float64, callback)
+    rospy.Subscriber("/proj_2/PositionJointInterface_J5_controller/command", Float64, callback)
     rospy.Subscriber("/proj_2/PositionJointInterface_J6_controller/command", Float64, callback)
     rospy.Subscriber("/proj_2/PositionJointInterface_J7_controller/command", Float64, callback)
 
