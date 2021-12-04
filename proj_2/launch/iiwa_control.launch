@@ -4,8 +4,8 @@
     <!-- Launches the controllers according to the hardware interface selected -->
     <!-- Everythings is spawned under a namespace with the same name as the robot's. -->
     
-    <arg name="hardware_interface" default="PositionJointInterface"/>
-    <arg name="controllers" default="joint_state_controller pos_joint_trajectory_controller"/>
+    <arg name="hardware_interface" default="JointPositionController"/>
+    <arg name="controllers" default="joint_state_controller JointPositionController"/>
     <arg name="robot_name" default="iiwa" />
     <arg name="model" default="iiwa7" />
     <arg name="joint_state_frequency" default="100" />
@@ -17,7 +17,8 @@
     
     <!-- Loads the controllers -->
     <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
-          output="screen" args="$(arg controllers)" />
+          output="screen" args="joint_state_controller PositionJointInterface_J1_controller PositionJointInterface_J2_controller PositionJointInterface_J3_controller 
+          PositionJointInterface_J4_controller PositionJointInterface_J5_controller PositionJointInterface_J6_controller PositionJointInterface_J7_controller"/>
     
     <!-- Converts joint states to TF transforms for rviz, etc -->
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
