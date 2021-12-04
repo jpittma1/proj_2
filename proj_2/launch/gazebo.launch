@@ -22,7 +22,7 @@
     <arg name="model" default="iiwa7"/>
     
     <!-- Select the controller -->
-    <arg name="controller" default="PositionController"/>
+    <arg name="controller" default="JointPositionController"/>
 
     <!-- Loads the Gazebo world. -->
     <include file="$(find proj_2)/launch/iiwa_world.launch">
@@ -40,7 +40,6 @@
     <!-- Spawn controller -->
     <rosparam file="$(find proj_2)/config/iiwa_control.yaml" command="load" ns="$(arg robot_name)"/> 
     <include file="$(find proj_2)/launch/iiwa_control.launch">
-       <arg name="controller" value="$(arg controller)"/>
     </include>
 
 
