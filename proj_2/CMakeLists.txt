@@ -9,6 +9,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   roslaunch
+  urdf
 )
 
 catkin_package(
