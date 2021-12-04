@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # ENPM Project 2 Fall AY2021
 # Script for calibration of Kuka Robot
 
@@ -195,28 +195,40 @@ cal=0.01 #calibrate every 10cm
 i=2 #iterate calibration rows
     
 def kuka_calibrate():
+    goal_1=[-0.2, 0.7, 0.0]
+    goal_2=[0.2, 0.7, 0.0]
+    goal_3=[0.2, 0.4, 0.0]
+    goal_4=[-0.2, 0.4, 0.0]
+    d_x=goal_1[0]
+    d_y=goal_1[1]
+    d_z=goal_1[2]
+
     #while position of EE is not goal_3 or 4   
     while (d_x!=goal_4[0] and d_y!=goal_4[1]) or (d_x!=goal_3[0] and d_y!=goal_3[1]):
     #calibrating between goal 1 and 2
         if d_y==goal_1[1]: #700
             if d_x==goal_2[0]:
                 d_y=goal_2[1]-cal #move down a row
+                print("\nRow complete!\nNow calibrating to the right!")
                 
             d_x=d_x+cal
         elif d_x!=goal_1[0] and d_y!=goal_2[1]-error: #calibrating between goal 2 and sub1 goal 1
             if d_x==goal_1[0] and d_y==goal_1[1]-error:
                 d_y=goal_1[1]-cal #move down a row
+                print("\nRow complete!\nNow calibrating to the left!")
                 
             d_x=d_x-cal
         elif d_y==goal_1[1]-(i*cal): #calibrating between goal 1-(i*cal) and goal 2-(i*cal)
             if d_x==goal_2[0]:
                 d_y=d_y-cal #move down a row (-y)
-                i+=1
+                print("\nRow complete!\nNow calibrating to the right!")
+                i=i+1
                 
             d_x=d_x+cal #move toward right (+x)
         elif d_x!=goal_1[0] and d_y!=goal_2[1]-(i*cal):#calibrating between goal 2-(i*cal) and  goal 1-i*cal
             if d_x==goal_1[0] and d_y==goal_1[1]-(i*cal):
                 d_y=d_y-cal #move down a row (-y)
+                print("\nRow complete!\nNow calibrating to the left!")
                 i=i+1
                 
             d_x=d_x-cal #move towards left (-x)
