@@ -164,8 +164,8 @@ Moving Kuka for Calibration of Tool!
 ---------------------------
 (Positions are in mm)
 Position pt is (x, y, z)
-Position 1 is (-200, 600, 0)
-Position 2 is (200, 600, 0)
+Position 1 is (-200, 700, 0)
+Position 2 is (200, 700, 0)
 Position 3 is (200, 400, 0)
 Position 4 is (-200, 400, 0)
 Allowed error is 10 mm
@@ -287,4 +287,4 @@ if __name__=="__main__":
         pub_J4.publish(t4) 
         pub_J5.publish(t5) 
         pub_J6.publish(t6) 
-        pub_J7.publish(t7) 
+        pub_J7.publish(t7)
