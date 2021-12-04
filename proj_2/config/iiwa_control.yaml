@@ -107,7 +107,6 @@ iiwa:
   VelocityJointInterface_J7_controller:
     type: velocity_controllers/JointVelocityController
     joint: iiwa_joint_7
-    pid: {p: 100,  i: 0.1, d: 0.01}
     
   # Trajectory Controllers ---------------------------------------
   #   
@@ -123,7 +122,6 @@ iiwa:
       - iiwa_joint_6
       - iiwa_joint_7
       
-      # VALUES ARE NOT CORRECT !
     gains:
       iiwa_joint_1: {p: 500,  d: 30, i: 15, i_clamp: 30}
       iiwa_joint_2: {p: 200,  d: 10, i: 10, i_clamp: 30}
