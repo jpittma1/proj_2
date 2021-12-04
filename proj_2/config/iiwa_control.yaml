@@ -4,6 +4,7 @@ iiwa:
     type: joint_state_controller/JointStateController
     publish_rate: 500  # in Hz
 
+  
   # Default Controllers ------------------------------------------------
   TorqueController:
     type: effort_controllers/JointGroupEffortController
@@ -26,6 +27,7 @@ iiwa:
       - iiwa_joint_5
       - iiwa_joint_6
       - iiwa_joint_7
+
     iiwa_joint_1:
       pid: {p: 800.0, i: 100, d: 80.0, i_clamp_min: -10000, i_clamp_max: 10000}
     iiwa_joint_2:
@@ -52,39 +54,13 @@ iiwa:
       - iiwa_joint_6
       - iiwa_joint_7
 
-  # Custom Controllers ------------------------------------------------
-  # The space variable can be either set to "task" or "joint"
-  CustomControllers:
-    type: iiwa_control/CustomEffortController
-    joints:
-      - iiwa_joint_1
-      - iiwa_joint_2
-      - iiwa_joint_3
-      - iiwa_joint_4
-      - iiwa_joint_5
-      - iiwa_joint_6
-      - iiwa_joint_7
-    params:
-      space: task
-      # end_effector is only needed in task space
-      end_effector: iiwa_link_ee
-      null_space:
-        joints: [0.044752691045324394, 0.6951627023357917, -0.01416978801753847, -1.0922311725109015, -0.0050429618456282, 1.1717338014778385, -0.01502630060305613]
-        Kp: 20.
-        Kd: 0.1
-        max_torque: 10.
-    controllers:
-      LinearDS: {type: "LinearDSController", params: [1., 1., 1.]}
-      # ForceDS: {type: "ForceModDSController", params: [200]}
-      PassiveDS: {type: "PassiveDSController", params: [200, 200]}
-      PD: {type: "PidController", params: [20., 2.], input: "Orientation", output: "Torque"}
-    structure:
-      # AddCtrl:
-      #   - LinearDS
-      #   - ForceDS
-      CascadeCtrl:
-        - LinearDS
-        - PassiveDS
+    iiwa_joint_1:  {p: 700,  i: 0.01, d: 100}
+    iiwa_joint_2:  {p: 10000,  i: 100, d: 100}
+    iiwa_joint_3: {p: 4500,  i: 35, d: 1}
+    iiwa_joint_4:  {p: 5500,  i: 60, d: 2}
+    iiwa_joint_5: {p: 1000,  i: 30, d: 0.01}
+    iiwa_joint_6:  {p: 500,  i: 0.1, d: 0.01}
+    iiwa_joint_7: {p: 100,  i: 0.1, d: 0.01}
 
   PositionTrajectoryController:
     type: position_controllers/JointTrajectoryController
@@ -104,3 +80,11 @@ iiwa:
     action_monitor_rate: 30            # Override default
     stop_trajectory_duration: 0        # Override default
 
+# gazebo_ros_control/pid_gains:
+#   iiwa_joint_1:  {p: 700,  i: 0.01, d: 100}
+#   iiwa_joint_2:  {p: 10000,  i: 100, d: 100}
+#   iiwa_joint_3: {p: 4500,  i: 35, d: 1}
+#   iiwa_joint_4:  {p: 5500,  i: 60, d: 2}
+#   iiwa_joint_5: {p: 1000,  i: 30, d: 0.01}
+#   iiwa_joint_6:  {p: 500,  i: 0.1, d: 0.01}
+#   iiwa_joint_7: {p: 100,  i: 0.1, d: 0.01}
