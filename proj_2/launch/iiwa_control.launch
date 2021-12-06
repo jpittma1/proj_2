@@ -3,23 +3,24 @@
     
     <!-- Launches the controllers according to the hardware interface selected -->
     <!-- Everythings is spawned under a namespace with the same name as the robot's. -->
-   
-    <!-- Select the controller -->
-    <arg name="controllers" default="joint_state_controller position_controllers"/>
+    
+    <arg name="hardware_interface" default="JointPositionController"/>
+    <arg name="controllers" default="joint_state_controller JointPositionController"/>
     <arg name="robot_name" default="iiwa" />
     <arg name="model" default="iiwa7" />
     <arg name="joint_state_frequency" default="100" />
     <arg name="robot_state_frequency" default="100" />
-
-    <!-- Load joint controller configurations from YAML file to parameter server -->
-    <rosparam file="$(find proj_2)/config/iiwa_control.yaml" command="load"/>
+    
+    <!-- Loads joint controller configurations from YAML file to parameter server -->
+    <rosparam file="$(find proj_2)/config/iiwa_control.yaml" command="load" />
     <param name="/$(arg robot_name)/joint_state_controller/publish_rate" value="$(arg joint_state_frequency)" />
-
-     <!-- load the controllers -->
-     <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
-          output="screen" args="$(arg controllers)" />
-
-    <!-- convert joint states to TF transforms for rviz, etc -->
+    
+    <!-- Loads the controllers -->
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+          output="screen" args="joint_state_controller PositionJointInterface_J1_controller PositionJointInterface_J2_controller PositionJointInterface_J3_controller 
+          PositionJointInterface_J4_controller PositionJointInterface_J5_controller PositionJointInterface_J6_controller PositionJointInterface_J7_controller"/>
+    
+    <!-- Converts joint states to TF transforms for rviz, etc -->
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
           respawn="false" output="screen">
         <remap from="joint_states" to="/$(arg robot_name)/joint_states" />

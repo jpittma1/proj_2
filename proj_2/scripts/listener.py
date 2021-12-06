@@ -12,13 +12,13 @@ def listener():
 
     rospy.init_node('listener', anonymous=True)
     
-    rospy.Subscriber("/proj_2/PositionJointInterface_J1_controller/command", Float64, callback)
-    rospy.Subscriber("/proj_2/PositionJointInterface_J2_controller/command", Float64, callback)
-    rospy.Subscriber("/proj_2/PositionJointInterface_J3_controller/command", Float64, callback)
-    rospy.Subscriber("/proj_2/PositionJointInterface_J4_controller/command", Float64, callback)
-    rospy.Subscriber("/proj_2/PositionJointInterface_J5_controller/command", Float64, callback)
-    rospy.Subscriber("/proj_2/PositionJointInterface_J6_controller/command", Float64, callback)
-    rospy.Subscriber("/proj_2/PositionJointInterface_J7_controller/command", Float64, callback)
+    rospy.Subscriber("/iiwa/PositionJointInterface_J1_controller/command", Float64, callback)
+    rospy.Subscriber("/iiwa/PositionJointInterface_J2_controller/command", Float64, callback)
+    rospy.Subscriber("/iiwa/PositionJointInterface_J3_controller/command", Float64, callback)
+    rospy.Subscriber("/iiwa/PositionJointInterface_J4_controller/command", Float64, callback)
+    rospy.Subscriber("/iiwa/PositionJointInterface_J5_controller/command", Float64, callback)
+    rospy.Subscriber("/iiwa/PositionJointInterface_J6_controller/command", Float64, callback)
+    rospy.Subscriber("/iiwa/PositionJointInterface_J7_controller/command", Float64, callback)
 
     # spin() simply keeps python from exiting until this node is stopped
     rospy.spin()
